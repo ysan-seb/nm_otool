@@ -6,13 +6,13 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:21:46 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/03 19:20:22 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 16:35:14 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static int leave_the_program(char *file, char *error)
+static int	leave_the_program(char *file, char *error)
 {
 	if (!file)
 		printf("%s\n", error);
@@ -21,10 +21,10 @@ static int leave_the_program(char *file, char *error)
 	return (ERR);
 }
 
-static int arg_init(int ac, char *file)
+static int	arg_init(int ac, char *file)
 {
-	int fd;
-	t_stat stat;
+	int		fd;
+	t_stat	stat;
 
 	stat.filename = file;
 	stat.tss = 0;
@@ -38,7 +38,7 @@ static int arg_init(int ac, char *file)
 	if (fstat(fd, &stat.stat) < 0)
 		return (leave_the_program("Error", ERR_STAT));
 	if ((stat.ptr = mmap(0, stat.stat.st_size,
-						 PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
+			PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0)) == MAP_FAILED)
 		return (leave_the_program(file, ERR_MAP));
 	nm(stat, stat.ptr);
 	if (munmap(stat.ptr, stat.stat.st_size) < 0)
@@ -46,7 +46,7 @@ static int arg_init(int ac, char *file)
 	return (OK);
 }
 
-int main(int ac, char **av)
+int			main(int ac, char **av)
 {
 	int i;
 

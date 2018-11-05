@@ -6,18 +6,25 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:30:34 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/10/31 18:31:27 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 20:22:20 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib_macho.h"
 
-struct fat_arch		*get_fat_arch_32(t_stat stat, void *ptr, size_t offset)
+struct fat_arch		*get_fat_arch_32(t_stat stat, void *ptr, uint32_t magic, size_t offset)
 {
 	struct fat_arch	*arch;
 
 	if (checkoff(stat, ptr, offset + sizeof(struct fat_arch)) == ERR)
 		return (NULL);
 	arch = (struct fat_arch *)(ptr + offset);
+	if (magic == FAT_MAGIC)
+		return (arch);
+	arch->cputype = swap_bits_32(arch->cputype);
+	arch->cpusubtype = swap_bits_32(arch->cpusubtype);
+	arch->offset = swap_bits_32(arch->offset);
+	// arch->size = swap_bits_32(arch->size);
+	// arch->align = swap_bits_32(arch->align);
 	return (arch);
 }

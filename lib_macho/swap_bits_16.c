@@ -1,23 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_fat_arch_64.c                                  :+:      :+:    :+:   */
+/*   swap_bits_16.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/29 12:32:00 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/10/31 18:31:45 by ysan-seb         ###   ########.fr       */
+/*   Created: 2018/11/05 13:12:47 by ysan-seb          #+#    #+#             */
+/*   Updated: 2018/11/05 13:22:48 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib_macho.h"
 
-struct fat_arch_64		*get_fat_arch_64(t_stat stat, void *ptr, size_t offset)
+uint16_t		swap_bits_16(uint16_t n)
 {
-	struct fat_arch_64	*arch;
-
-	if (checkoff(stat, ptr, offset + sizeof(struct fat_arch_64)) == ERR)
-		return (NULL);
-	arch = (struct fat_arch_64 *)(ptr + offset);
-	return (arch);
+	return (((n & 0xff00) >> 8) | ((n & 0x00ff) << 8));
 }

@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   swap_or_16.c                                       :+:      :+:    :+:   */
+/*   swap_bits_32.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/31 13:47:20 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 13:24:39 by ysan-seb         ###   ########.fr       */
+/*   Created: 2018/11/05 13:16:31 by ysan-seb          #+#    #+#             */
+/*   Updated: 2018/11/05 13:22:52 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib_macho.h"
 
-uint16_t			swap_or_16(uint32_t magic, uint16_t value)
+uint32_t		swap_bits_32(uint32_t n)
 {
-	if (magic == MH_MAGIC || magic == MH_MAGIC_64 ||
-			magic == FAT_MAGIC || magic == FAT_MAGIC_64)
-		return (value);
-	return (swap_bits_16(value));
+	return (((n & 0xff000000) >> 24) | ((n & 0x00ff0000) >> 8)
+			| ((n & 0x0000ff00) << 8) | ((n & 0x000000ff) << 24));
 }

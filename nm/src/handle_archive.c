@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 13:34:49 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/01 14:44:02 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 20:58:00 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,34 +64,34 @@ static int		get_n_object(t_stat s, void *p, size_t off)
 		p += 8;
 		i++;
 	}
-	// while (size--)
-		free(object);
+	free(object);
 	return (n_object);
 }
 
 static int		object_parse(t_stat s, struct ar_hdr *o, int size, size_t off)
 {
-	struct mach_header_64	*header;
+	void					*header;
 
-	header = get_mach_header_64(s, s.ptr, off + atoi(o->ar_name + 3));
-	if (!header)
+	if (checkoff(s, s.ptr, off + atoi(o->ar_name)) == ERR)
 		return (ERR);
+	header = s.ptr + off + atoi(o->ar_name + 3);
 	s.object_name = o->ar_fmag + 2;
 	while (size--)
 	{
 		if (nm(s, header) == ERR)
 			return (ERR);
-		if (size > 0){
+		if (size > 0)
+		{
 			off += atoi(o->ar_size);
 			if (checkoff(s, s.ptr, off) == ERR)
 				return (ERR);
 			o = s.ptr + off;
 			s.object_name = o->ar_fmag + 2;
 			off += sizeof(struct ar_hdr);
-			header = get_mach_header_64(s, s.ptr, off +
-					atoi(o->ar_name + 3));
-			if (!header)
-				return (ERR);}
+			if (checkoff(s, s.ptr, off + atoi(o->ar_name)) == ERR)
+				return (ERR);
+			header = s.ptr + off + atoi(o->ar_name + 3);
+		}
 	}
 	return (OK);
 }

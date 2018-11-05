@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 13:47:31 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/03 20:19:07 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 14:54:50 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ typedef struct				s_stat
 }							t_stat;
 
 int							checkoff(t_stat stat, void *ptr, size_t offset);
+uint16_t					swap_bits_16(uint16_t n);
+uint32_t					swap_bits_32(uint32_t n);
+uint64_t					swap_bits_64(uint64_t n);
 uint16_t					swap_or_16(uint32_t magic, uint16_t value);
 uint32_t					swap_or_32(uint32_t magic, uint32_t value);
 uint64_t					swap_or_64(uint32_t magic, uint64_t value);
@@ -60,20 +63,18 @@ struct mach_header_64		*get_mach_header_64(t_stat stat,
 struct fat_header			*get_fat_header(t_stat stat,
 		void *ptr, size_t offset);
 struct fat_arch				*get_fat_arch_32(t_stat stat,
-		void *ptr, size_t offset);
-struct fat_arch_64			*get_fat_arch_64(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct symtab_command		*get_symtab_command(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct load_command			*get_load_command(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct segment_command		*get_segment_command_32(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct segment_command_64	*get_segment_command_64(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct section				*get_section_32(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 struct section_64			*get_section_64(t_stat stat,
-		void *ptr, size_t offset);
+		void *ptr, uint32_t magic, size_t offset);
 
 #endif

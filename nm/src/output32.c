@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 14:03:21 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/03 19:34:13 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 20:01:03 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,17 @@ static int		is_sorted(void *ptr, struct nlist *array, struct mach_header *h, str
 	char *s1;
 	char *s2;
 
-	stringtable = (void *)ptr + swap_or_32(h->magic, s->stroff);
+	stringtable = (void *)ptr + s->stroff;
 	i = 0;
-	while (i + 1 < swap_or_32(h->magic, s->nsyms))
+	while (i + 1 < s->nsyms)
 	{
 		s1 = stringtable + swap_or_32(h->magic, array[i].n_un.n_strx);
 		s2 = stringtable + swap_or_32(h->magic, array[i + 1].n_un.n_strx);
 		if (strcmp(s1, s2) > 0)
 			return (0);
+		else if (strcmp(s1, s2) == 0)
+			if (array[i].n_value > array[i + 1].n_value)
+				return (0);
 		i++;
 	}
 	return (1);
@@ -85,15 +88,13 @@ static struct nlist *sort(t_stat stat, void *ptr, struct mach_header *header, st
 	char *stringtable;
 	char *s1;
 	char *s2;
-	// static int yolo = 0;
-		(void)stat;
-	// yolo++;
+
 	i = 0;
-	if (checkoff(stat, ptr, swap_or_32(header->magic, s->symoff)) == ERR || checkoff(stat, ptr, swap_or_32(header->magic, s->stroff)) == ERR || checkoff(stat, ptr, swap_or_32(header->magic, s->strsize)) == ERR)
+	if (checkoff(stat, ptr, s->symoff) == ERR || checkoff(stat, ptr, s->stroff) == ERR || checkoff(stat, ptr, s->strsize) == ERR)
 		return (NULL);
-	array = (void *)ptr + swap_or_32(header->magic, s->symoff);
-	stringtable = (void *)ptr + swap_or_32(header->magic, s->stroff);
-	while (i + 1 < swap_or_32(header->magic, s->nsyms))
+	array = (void *)ptr + s->symoff;
+	stringtable = (void *)ptr + s->stroff;
+	while (i + 1 < s->nsyms)
 	{
 		if (checkoff(stat, stringtable,  swap_or_32(header->magic, array[i].n_un.n_strx)) == ERR || checkoff(stat, stringtable, swap_or_32(header->magic, array[i + 1].n_un.n_strx)) == ERR)
 			return (NULL);
@@ -132,12 +133,12 @@ int output32(t_stat stat,
 	char *stringtables;
 
 
-	if ((a = sort_ascii(stat, p, h, s)) == NULL || checkoff(stat, p, swap_or_32(h->magic, s->stroff)) == ERR)
+	if ((a = sort_ascii(stat, p, h, s)) == NULL || checkoff(stat, p, s->stroff) == ERR)
 		return (ERR);
-	stringtables = p + swap_or_32(h->magic, s->stroff);
+	stringtables = p + s->stroff;
 	i = 0;
 	print_name(stat);
-	while (i < swap_or_32(h->magic, s->nsyms))
+	while (i < s->nsyms)
 	{
 		if (a[i].n_type & N_STAB)
 			;
@@ -152,32 +153,3 @@ int output32(t_stat stat,
 	}
 	return (OK);
 }
-
-// int					output32(t_stat stat, t_list64 *list64)
-// {
-// 	t_list64	*begin;
-// 	char		*stringtables;
-
-// 	if (!list64)
-// 		return (ERR);
-// 	begin = list64;
-// 	if (checkoff(stat, list64->ptr, list64->stroff) == ERR)
-// 		return (ERR);
-// 	stringtables = list64->ptr + list64->stroff;
-// 	print_name(stat);
-// 	while (list64)
-// 	{
-// 		if (list64->n_type < 36)
-// 		{
-// 			if (list64->n_value != 0)
-// 				printf("%08llx %c %s\n", list64->n_value,
-// 				get_symbole_type(stat, list64), list64->name);
-// 			else
-// 				printf("         %c %s\n",
-// 				get_symbole_type(stat, list64), list64->name);
-// 		}
-// 		list64 = list64->next;
-// 	}
-// 	// free_list64(begin);
-// 	return (OK);
-// }

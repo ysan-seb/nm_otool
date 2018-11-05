@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:34:53 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/10/31 18:32:40 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 20:36:30 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,5 +19,13 @@ struct mach_header	*get_mach_header_32(t_stat stat, void *ptr, size_t offset)
 	if (checkoff(stat, ptr, offset + sizeof(struct mach_header)) == ERR)
 		return (NULL);
 	header = (struct mach_header *)(ptr + offset);
+	if (header->magic == MH_MAGIC)
+		return (header);
+	header->cputype = swap_bits_32(header->cputype);
+	header->cpusubtype = swap_bits_32(header->cpusubtype);
+	header->filetype = swap_bits_32(header->filetype);
+	header->ncmds = swap_bits_32(header->ncmds);
+	header->sizeofcmds = swap_bits_32(header->sizeofcmds);
+	// header->flags = swap_bits_32(header->flags);
 	return (header);
 }

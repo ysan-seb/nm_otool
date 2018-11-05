@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 14:27:29 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/03 18:18:07 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 20:36:17 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,21 +29,20 @@ int				parse_section_32(t_stat *stat,
 	struct section			*sect;
 	struct segment_command	*seg;
 
-	seg = get_segment_command_32(*stat, (void*)lc, 0);
+	seg = get_segment_command_32(*stat, (void*)lc, header->magic, 0);
 	if (seg == NULL)
 		return (ERR);
 	i = 0;
-	if (strcmp(seg->segname, "__TEXT") == 0 || strcmp(seg->segname, "__DATA") == 0 ||
-			swap_or_32(header->magic, header->filetype) == MH_OBJECT)
+	if (strcmp(seg->segname, "__TEXT") == 0 ||
+	strcmp(seg->segname, "__DATA") == 0 || header->filetype == MH_OBJECT)
 	{
-		sect = get_section_32(*stat, (void*)(seg + 1), 0);
-		while (i < (int)swap_or_32(header->magic, seg->nsects))
+		sect = get_section_32(*stat, (void*)(seg + 1), header->magic, 0);
+		while (i < (int)seg->nsects)
 		{
 			check_section_32(stat, sect, stat->i_sect);
 			i++;
 			stat->i_sect++;
-			sect = get_section_32(*stat,
-					(void*)(sect), sizeof(struct section));
+			sect = get_section_32(*stat, (void*)sect, header->magic, sizeof(struct section));
 			if (!sect)
 				return (ERR);
 		}

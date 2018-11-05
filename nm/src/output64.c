@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 15:14:58 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/03 20:18:35 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/05 19:59:18 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,9 @@ int		is_sorted(void *ptr, struct nlist_64 *array, struct mach_header_64 *h, stru
 	char *s1;
 	char *s2;
 
-	stringtable = (void *)ptr + swap_or_32(h->magic, s->stroff);
+	stringtable = (void *)ptr + s->stroff;
 	i = 0;
-	while (i + 1 < swap_or_32(h->magic, s->nsyms))
+	while (i + 1 < s->nsyms)
 	{
 		s1 = stringtable + swap_or_32(h->magic, array[i].n_un.n_strx);
 		s2 = stringtable + swap_or_32(h->magic, array[i + 1].n_un.n_strx);
@@ -91,13 +91,13 @@ struct nlist_64 *sort(t_stat stat, void *ptr, struct mach_header_64 *header, str
 	char *s2;
 
 	i = 0;
-	if (checkoff(stat, ptr, swap_or_32(header->magic, s->symoff)) == ERR || checkoff(stat, ptr, swap_or_32(header->magic, s->stroff)) == ERR || checkoff(stat, ptr, swap_or_32(header->magic, s->strsize)) == ERR)
+	if (checkoff(stat, ptr, s->symoff) == ERR || checkoff(stat, ptr, s->stroff) == ERR || checkoff(stat, ptr, s->strsize) == ERR)
 		return (NULL);
-	array = (void *)ptr + swap_or_32(header->magic, s->symoff);
-	stringtable = (void *)ptr + swap_or_32(header->magic, s->stroff);
-	while (i + 1 < swap_or_32(header->magic, s->nsyms))
+	array = (void *)ptr + s->symoff;
+	stringtable = (void *)ptr + s->stroff;
+	while (i + 1 < s->nsyms)
 	{
-		if (checkoff(stat, stringtable, array[i].n_un.n_strx) == ERR || checkoff(stat, stringtable, array[i + 1].n_un.n_strx) == ERR)
+		if (checkoff(stat, stringtable,  swap_or_32(header->magic, array[i].n_un.n_strx)) == ERR || checkoff(stat, stringtable, swap_or_32(header->magic, array[i + 1].n_un.n_strx)) == ERR)
 			return (NULL);
 		s1 = stringtable + swap_or_32(header->magic, array[i].n_un.n_strx);
 		s2 = stringtable + swap_or_32(header->magic, array[i + 1].n_un.n_strx);
