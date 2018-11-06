@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:23:47 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 19:21:17 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 17:45:31 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int		nm(t_stat stat, void *ptr)
 
 	ret = OK;
 	magic = *(int*)ptr;
-
 	if (magic == 0)
 		return (ERR);
 	if (magic == MH_MAGIC || magic == MH_CIGAM)

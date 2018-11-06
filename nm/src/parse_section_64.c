@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 14:28:30 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 17:22:33 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 17:48:11 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,18 +33,18 @@ int				parse_section_64(t_stat *stat,
 	if (seg == NULL)
 		return (ERR);
 	i = 0;
-	if (strcmp(seg->segname, "__TEXT") == 0 || strcmp(seg->segname, "__DATA") == 0
-	|| header->filetype == MH_OBJECT)
+	if (strcmp(seg->segname, "__TEXT") == 0
+		|| strcmp(seg->segname, "__DATA") == 0 || header->filetype == MH_OBJECT)
 	{
-		sect = get_section_64(*stat, (void*)(seg + 1), header->magic, 0);
 		while (i < (int)seg->nsects)
 		{
-			check_section_64(stat, sect, stat->i_sect);
-			i++;
-			stat->i_sect++;
-			sect = get_section_64(*stat, (void*)sect, header->magic, sizeof(struct section_64));
+			sect = get_section_64(*stat,
+				(void*)(seg + 1), header->magic, i * sizeof(struct section_64));
 			if (!sect)
 				return (ERR);
+			check_section_64(stat, sect, stat->i_sect);
+			stat->i_sect++;
+			i++;
 		}
 	}
 	return (OK);

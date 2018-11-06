@@ -6,24 +6,26 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 14:03:21 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 20:01:03 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 17:29:22 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static int get_symbole_type(t_stat stat, struct nlist e32)
+static int get_symbole_type(t_stat stat, struct mach_header *header, struct nlist e32)
 {
 	char type = e32.n_type & N_TYPE;
 	char s_type = '?';
-
+	(void)header;
+	// if (e32.n_type == MH_OBJECT && type == N_UNDF && e32.n_type & N_EXT)
+	// 	return ('C');
 	if (type == N_ABS)
 		s_type = 'a';
 	else if (type == N_INDR)
 		s_type = 'i';
 	else if (type == N_UNDF || type == N_PBUD)
 		s_type = 'u';
-	if (type == N_SECT)
+	else if (type == N_SECT)
 	{
 		if (e32.n_sect == stat.tss)
 			s_type = 't';
@@ -45,8 +47,8 @@ static void print_name(t_stat stat)
 		printf("\n%s:\n", stat.filename);
 	else if (strlen(stat.arch_name) > 0)
 		printf("\n%s %s:\n", stat.filename, stat.arch_name);
-	else if (stat.object_name)
-		printf("\n%s(%s):\n", stat.filename, stat.object_name);
+	// else if (stat.object_name)
+	// 	printf("\n%s(%s):\n", stat.filename, stat.object_name);
 }
 
 static void swap_arr(struct nlist *a, struct nlist *b)
@@ -144,10 +146,10 @@ int output32(t_stat stat,
 			;
 		else 
 		{
-			if (a[i].n_type & N_SECT)
-				printf("%08x %c %s\n", swap_or_32(h->magic, a[i].n_value), get_symbole_type(stat, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
+			if (a[i].n_type & N_SECT || a[i].n_type & N_PEXT)
+				printf("%08x %c %s\n", swap_or_32(h->magic, a[i].n_value), get_symbole_type(stat, h, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
 			else
-				printf("         %c %s\n", get_symbole_type(stat, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
+				printf("         %c %s\n", get_symbole_type(stat, h, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
 		}
 		i++;
 	}

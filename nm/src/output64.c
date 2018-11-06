@@ -6,24 +6,26 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 15:14:58 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 19:59:18 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 16:13:15 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static int get_symbole_type(t_stat stat, struct nlist_64 e64)
+static int get_symbole_type(t_stat stat, struct mach_header_64 *header, struct nlist_64 e64)
 {
 	char type = e64.n_type & N_TYPE;
 	char s_type = '?';
 
-	if (type == N_ABS)
+	if (header->filetype == MH_OBJECT && e64.n_type & N_EXT && type == N_UNDF && e64.n_value > 0)
+		return ('C');
+	else if (type == N_ABS)
 		s_type = 'a';
 	else if (type == N_INDR)
 		s_type = 'i';
 	else if (type == N_UNDF || type == N_PBUD)
 		s_type = 'u';
-	if (type == N_SECT)
+	else if (type == N_SECT)
 	{
 		if (e64.n_sect == stat.tss)
 			s_type = 't';
@@ -46,8 +48,8 @@ static void print_name(t_stat stat)
 		printf("\n%s:\n", stat.filename);
 	else if (strlen(stat.arch_name) > 0)
 		printf("\n%s %s:\n", stat.filename, stat.arch_name);
-	else if (stat.object_name)
-		printf("\n%s(%s):\n", stat.filename, stat.object_name);
+	// else if (stat.object_name)
+	// 	printf("\n%s(%s):\n", stat.filename, stat.object_name);
 }
 
 void swap_arr(struct nlist_64 *a, struct nlist_64 *b)
@@ -144,10 +146,10 @@ int output64(t_stat stat,
 			;
 		else 
 		{
-			if (a[i].n_type & N_SECT)
-				printf("%016llx %c %s\n", a[i].n_value, get_symbole_type(stat, a[i]), stringtables + a[i].n_un.n_strx);
+			if (a[i].n_type & N_SECT || (h->filetype == MH_OBJECT && (a[i].n_type & N_TYPE) == N_UNDF && a[i].n_type & N_EXT && a[i].n_value > 0))
+				printf("%016llx %c %s\n", a[i].n_value, get_symbole_type(stat, h, a[i]), stringtables + a[i].n_un.n_strx);
 			else
-				printf("                 %c %s\n", get_symbole_type(stat, a[i]), stringtables + a[i].n_un.n_strx);
+				printf("                 %c %s\n", get_symbole_type(stat, h, a[i]), stringtables + a[i].n_un.n_strx);
 		}
 		i++;
 	}

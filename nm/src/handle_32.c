@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 16:34:53 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 21:03:34 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 11:48:48 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,10 @@ int		parse_command_32(t_stat stat,
 
 	i[0] = 0;
 	i[1] = header->ncmds;
-	stat.i_sect = 0;
-	while (i[0] < i[1])
+	while (i[0]++ < i[1] - 1)
 	{
-		if (lc->cmd == LC_SEGMENT) 
-			if (parse_section_32(&stat, header, lc) == ERR)
-				return (ERR);
+		if (lc->cmd == LC_SEGMENT && parse_section_32(&stat, header, lc) == ERR)
+			return (ERR);
 		if (lc->cmd == LC_SYMTAB)
 		{
 			sym = get_symtab_command(stat, (void*)lc, header->magic, 0);
@@ -38,9 +36,7 @@ int		parse_command_32(t_stat stat,
 		lc = get_load_command(stat, (void*)lc, header->magic, lc->cmdsize);
 		if (!lc)
 			return (ERR);
-		i[0]++;
 	}
-	stat.i_sect = 0;
 	return (OK);
 }
 
@@ -49,6 +45,7 @@ int		handle_32(t_stat stat, void *ptr)
 	struct mach_header		*header;
 	struct load_command		*lc;
 
+	stat.i_sect = 0;
 	header = get_mach_header_32(stat, ptr, 0);
 	if (!header)
 		return (ERR);
