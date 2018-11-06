@@ -6,13 +6,14 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:34:05 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 17:32:59 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 17:59:13 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib_macho.h"
 
-struct load_command		*get_load_command(t_stat stat, void *ptr, uint32_t magic, size_t offset)
+struct load_command		*get_load_command(t_stat stat,
+		void *ptr, uint32_t magic, size_t offset)
 {
 	struct load_command	*lc;
 

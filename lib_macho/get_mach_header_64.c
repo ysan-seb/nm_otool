@@ -6,13 +6,14 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:35:25 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 20:22:38 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/06 18:00:57 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lib_macho.h"
 
-struct mach_header_64	*get_mach_header_64(t_stat stat, void *ptr, size_t offset)
+struct mach_header_64	*get_mach_header_64(t_stat stat,
+		void *ptr, size_t offset)
 {
 	struct mach_header_64	*header;
 
@@ -26,6 +27,5 @@ struct mach_header_64	*get_mach_header_64(t_stat stat, void *ptr, size_t offset)
 	header->filetype = swap_bits_32(header->filetype);
 	header->ncmds = swap_bits_32(header->ncmds);
 	header->sizeofcmds = swap_bits_32(header->sizeofcmds);
-	// header->flags = swap_bits_32(header->flags);
 	return (header);
 }
