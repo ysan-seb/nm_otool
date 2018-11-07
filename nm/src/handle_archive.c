@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 13:34:49 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 17:52:37 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 16:55:54 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ static int		object_parse(t_stat s, void *ptr, size_t off)
 			break ;
 		o = ptr + off;
 		off += sizeof(struct ar_hdr);
+		if (strncmp(o->ar_name, ARMAG, SARMAG) == OK)
+			break ;
 		if (s.ptr + s.stat.st_size < ptr + off + atoi(o->ar_name))
 			break ;
 		h_ptr = ptr + off + atoi(o->ar_name + 3);

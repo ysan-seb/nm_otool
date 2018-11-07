@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:23:47 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 17:45:31 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 16:25:38 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int		nm(t_stat stat, void *ptr)
 		ret = handle_archive(stat, ptr);
 	else
 	{
-		printf("%s: %s\n", stat.filename, NOT_VALID);
+		fprintf(stderr, "%s: %s\n", stat.filename, NOT_VALID);
 		return (ERR);
 	}
 	return (ret);

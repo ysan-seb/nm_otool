@@ -6,151 +6,87 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 14:03:21 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 17:29:22 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 15:07:00 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static int get_symbole_type(t_stat stat, struct mach_header *header, struct nlist e32)
+static int		get_sect_symbole_type(t_stat stat, struct nlist e32)
 {
-	char type = e32.n_type & N_TYPE;
-	char s_type = '?';
-	(void)header;
-	// if (e32.n_type == MH_OBJECT && type == N_UNDF && e32.n_type & N_EXT)
-	// 	return ('C');
-	if (type == N_ABS)
+	if (e32.n_sect == stat.tss)
+		return ('t');
+	else if (e32.n_sect == stat.dss)
+		return ('d');
+	else if (e32.n_sect == stat.bss)
+		return ('b');
+	else
+		return ('s');
+}
+
+static int		get_symbole_type(t_stat stat,
+struct mach_header *header, struct nlist e32)
+{
+	char type;
+	char s_type;
+
+	type = e32.n_type & N_TYPE;
+	s_type = '?';
+	if (header->filetype == MH_OBJECT
+	&& e32.n_type & N_EXT && type == N_UNDF && e32.n_value > 0)
+		return ('C');
+	else if (type == N_ABS)
 		s_type = 'a';
 	else if (type == N_INDR)
 		s_type = 'i';
 	else if (type == N_UNDF || type == N_PBUD)
 		s_type = 'u';
 	else if (type == N_SECT)
-	{
-		if (e32.n_sect == stat.tss)
-			s_type = 't';
-		else if (e32.n_sect == stat.dss)
-			s_type = 'd';
-		else if (e32.n_sect == stat.bss)
-			s_type = 'b';
-		else
-			s_type = 's';
-	}
+		s_type = get_sect_symbole_type(stat, e32);
 	if (e32.n_type & N_EXT)
 		s_type -= 32;
 	return (s_type);
 }
 
-static void print_name(t_stat stat)
+static void		print_name(t_stat stat)
 {
 	if (stat.m_arg)
 		printf("\n%s:\n", stat.filename);
 	else if (strlen(stat.arch_name) > 0)
 		printf("\n%s %s:\n", stat.filename, stat.arch_name);
-	// else if (stat.object_name)
-	// 	printf("\n%s(%s):\n", stat.filename, stat.object_name);
 }
 
-static void swap_arr(struct nlist *a, struct nlist *b)
+static int		is_common_sym(struct mach_header *h, struct nlist a)
 {
-	struct nlist c;
-
-	c = *a;
-	*a = *b;
-	*b = c;
+	if (h->filetype == MH_OBJECT && (a.n_type & N_TYPE) == N_UNDF
+		&& a.n_type & N_EXT && a.n_value > 0)
+		return (1);
+	return (0);
 }
 
-static int		is_sorted(void *ptr, struct nlist *array, struct mach_header *h, struct symtab_command *s)
+int				output32(t_stat stat,
+			struct mach_header *h, struct symtab_command *s, void *p)
 {
-	uint32_t i;
-	char *stringtable;
-	char *s1;
-	char *s2;
+	uint32_t		i;
+	struct nlist	*a;
+	char			*stable;
 
-	stringtable = (void *)ptr + s->stroff;
-	i = 0;
-	while (i + 1 < s->nsyms)
-	{
-		s1 = stringtable + swap_or_32(h->magic, array[i].n_un.n_strx);
-		s2 = stringtable + swap_or_32(h->magic, array[i + 1].n_un.n_strx);
-		if (strcmp(s1, s2) > 0)
-			return (0);
-		else if (strcmp(s1, s2) == 0)
-			if (array[i].n_value > array[i + 1].n_value)
-				return (0);
-		i++;
-	}
-	return (1);
-}
-
-static struct nlist *sort(t_stat stat, void *ptr, struct mach_header *header, struct symtab_command *s)
-{
-	uint32_t i;
-	struct nlist *array;
-	char *stringtable;
-	char *s1;
-	char *s2;
-
-	i = 0;
-	if (checkoff(stat, ptr, s->symoff) == ERR || checkoff(stat, ptr, s->stroff) == ERR || checkoff(stat, ptr, s->strsize) == ERR)
-		return (NULL);
-	array = (void *)ptr + s->symoff;
-	stringtable = (void *)ptr + s->stroff;
-	while (i + 1 < s->nsyms)
-	{
-		if (checkoff(stat, stringtable,  swap_or_32(header->magic, array[i].n_un.n_strx)) == ERR || checkoff(stat, stringtable, swap_or_32(header->magic, array[i + 1].n_un.n_strx)) == ERR)
-			return (NULL);
-		s1 = stringtable + swap_or_32(header->magic, array[i].n_un.n_strx);
-		s2 = stringtable + swap_or_32(header->magic, array[i + 1].n_un.n_strx);
-		if (strcmp(s1, s2) > 0)
-			swap_arr(&array[i], &array[i + 1]);
-		else if (strcmp(s1, s2) == 0)
-		{
-			if (swap_or_32(header->magic, array[i].n_value) > swap_or_32(header->magic, array[i + 1].n_value))
-				swap_arr(&array[i], &array[i + 1]);
-		}
-		i++;
-	}
-	return (array);
-}
-
-static struct nlist *sort_ascii(t_stat stat, void *ptr, struct mach_header *header, struct symtab_command *s){
-	struct nlist *array;
-
-	while (1)
-	{
-		if (!(array = sort(stat, ptr, header, s)))
-			return (NULL);
-		if (is_sorted(ptr, array, header, s))
-			break;
-	}
-	return (array);
-}
-
-int output32(t_stat stat,
-			 struct mach_header *h, struct symtab_command *s, void *p)
-{
-	uint32_t i;
-	struct nlist *a;
-	char *stringtables;
-
-
-	if ((a = sort_ascii(stat, p, h, s)) == NULL || checkoff(stat, p, s->stroff) == ERR)
+	if ((a = sort_ascii_32(stat, p, h, s)) == NULL ||
+	checkoff(stat, p, s->stroff) == ERR)
 		return (ERR);
-	stringtables = p + s->stroff;
+	stable = p + s->stroff;
 	i = 0;
 	print_name(stat);
 	while (i < s->nsyms)
 	{
 		if (a[i].n_type & N_STAB)
 			;
-		else 
-		{
-			if (a[i].n_type & N_SECT || a[i].n_type & N_PEXT)
-				printf("%08x %c %s\n", swap_or_32(h->magic, a[i].n_value), get_symbole_type(stat, h, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
-			else
-				printf("         %c %s\n", get_symbole_type(stat, h, a[i]), stringtables + swap_or_32(h->magic, a[i].n_un.n_strx));
-		}
+		else if (a[i].n_type & N_SECT || is_common_sym(h, a[i]))
+			printf("%08x %c %s\n", a[i].n_value,
+			get_symbole_type(stat, h, a[i]), stable + a[i].n_un.n_strx);
+		else
+			printf("         %c %s\n",
+			get_symbole_type(stat, h, a[i]), stable + a[i].n_un.n_strx);
 		i++;
 	}
 	return (OK);

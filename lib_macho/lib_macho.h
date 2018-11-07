@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 13:47:31 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 18:03:45 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 16:17:13 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@
 # define ERR_OPEN	"No such file or directory"
 # define ERR_STAT	"a problem was encountered with fstat"
 # define ERR_MAP	"The file was \e[1;38;5;1mnot\e[0m recognized as a\e[1;38;5;1m valid object file\e[0m"
+
 # define ERR_MUNMAP	"a problem was encountered with munmap"
 # define NOT_VALID	"The file was \e[1;38;5;1mnot\e[0m recognized as a\e[1;38;5;1m valid object file\e[0m"
 
@@ -76,5 +77,6 @@ struct section				*get_section_32(t_stat stat,
 		void *ptr, uint32_t magic, size_t offset);
 struct section_64			*get_section_64(t_stat stat,
 		void *ptr, uint32_t magic, size_t offset);
+int     checkptr(t_stat stat, char *str);
 
 #endif

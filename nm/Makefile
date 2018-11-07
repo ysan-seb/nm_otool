@@ -6,7 +6,7 @@
 #    By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/17 07:19:36 by ysan-seb          #+#    #+#              #
-#    Updated: 2018/11/06 17:48:39 by ysan-seb         ###   ########.fr        #
+#    Updated: 2018/11/07 16:16:56 by ysan-seb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,8 +26,11 @@ SRCS =	$(SRC_PATH)main.c \
 		$(SRC_PATH)handle_archive.c \
 		$(SRC_PATH)parse_section_32.c \
 		$(SRC_PATH)parse_section_64.c \
+		$(SRC_PATH)sort_ascii_32.c \
 		$(SRC_PATH)output32.c \
+		$(SRC_PATH)sort_ascii_64.c \
 		$(SRC_PATH)output64.c \
+		$(SRC_PATH)checkptr.c \
 		$(LIB_MACHO_PATH)checkoff.c \
 		$(LIB_MACHO_PATH)swap_bits_16.c \
 		$(LIB_MACHO_PATH)swap_bits_32.c \

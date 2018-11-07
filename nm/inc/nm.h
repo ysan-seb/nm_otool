@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:25:15 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 17:51:11 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 14:56:02 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,12 @@ int						parse_section_32(t_stat *stat,
 		struct mach_header *header, struct load_command *lc);
 int						parse_section_64(t_stat *stat,
 		struct mach_header_64 *header, struct load_command *lc);
+struct nlist 			*sort_ascii_32(t_stat stat,
+						void *ptr, struct mach_header *header, struct symtab_command *s);
 int						output32(t_stat stat,
 		struct mach_header *h, struct symtab_command *s, void *p);
+struct nlist_64 		*sort_ascii_64(t_stat stat,
+		void *ptr, struct mach_header_64 *header, struct symtab_command *s);
 int						output64(t_stat stat,
 		struct mach_header_64 *h, struct symtab_command *s, void *p);
 

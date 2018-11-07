@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checkoff.c                                         :+:      :+:    :+:   */
+/*   checkptr.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/29 15:18:37 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/07 16:25:23 by ysan-seb         ###   ########.fr       */
+/*   Created: 2018/11/07 16:16:17 by ysan-seb          #+#    #+#             */
+/*   Updated: 2018/11/07 16:20:39 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lib_macho.h"
+#include "nm.h"
 
-int		checkoff(t_stat stat, void *ptr, size_t offset)
+int		checkptr(t_stat stat, char *str)
 {
-	if ((stat.ptr + stat.stat.st_size) < (ptr + offset))
+	int i;
+
+	i = 0;
+	(void)stat;
+	while (str[i])
 	{
-		fprintf(stderr, "%s: \e[1;38;5;1mtruncated\e[0m or "
-		"\e[1;38;5;1mmalformed\e[0m file\n", stat.filename);
-		return (ERR);
+		if (stat.ptr + stat.stat.st_size < (void*)(str + i + 2))
+			return (i + 2);
+		i++;
 	}
-	return (OK);
+	return (0);
 }

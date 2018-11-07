@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:21:46 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/05 16:35:14 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 16:26:15 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static int	leave_the_program(char *file, char *error)
 {
 	if (!file)
-		printf("%s\n", error);
+		fprintf(stderr, "%s\n", error);
 	else
-		printf("%s: %s\n", file, error);
+		fprintf(stderr, "%s: %s\n", file, error);
 	return (ERR);
 }
 
