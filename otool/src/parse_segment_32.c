@@ -6,25 +6,25 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:47:34 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/10/30 15:56:27 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 17:56:44 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "otool.h"
 
 int		parse_segment_32(
-		t_stat stat, struct mach_header *header, struct load_command *lc)
+		t_stat stat, struct mach_header *h, struct load_command *lc)
 {
 	struct segment_command	*seg;
 
-	if (swap_or_32(header->magic, lc->cmd) == LC_SEGMENT)
+	if (lc->cmd == LC_SEGMENT)
 	{
-		seg = get_segment_command_32(stat, (void*)lc, 0);
+		seg = get_segment_command_32(stat, (void*)lc, h->magic, 0);
 		if (seg == NULL)
 			return (ERR);
 		if (strcmp(seg->segname, "__TEXT") == 0 ||
-				swap_or_32(header->magic, header->filetype) == MH_OBJECT)
-			output_32(stat, header, seg);
+			h->filetype == MH_OBJECT)
+			output_32(stat, h, seg);
 	}
 	return (OK);
 }

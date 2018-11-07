@@ -6,7 +6,7 @@
 #    By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/17 07:19:36 by ysan-seb          #+#    #+#              #
-#    Updated: 2018/10/30 15:19:34 by ysan-seb         ###   ########.fr        #
+#    Updated: 2018/11/07 18:09:30 by ysan-seb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,10 @@ SRCS =	$(SRC_PATH)main.c \
 		$(SRC_PATH)output_32.c \
 		$(SRC_PATH)output_64.c \
 		$(LIB_MACHO_PATH)checkoff.c \
+		$(LIB_MACHO_PATH)swap_bits_16.c \
+		$(LIB_MACHO_PATH)swap_bits_32.c \
+		$(LIB_MACHO_PATH)swap_bits_64.c \
+		$(LIB_MACHO_PATH)swap_or_16.c \
 		$(LIB_MACHO_PATH)swap_or_32.c \
 		$(LIB_MACHO_PATH)swap_or_64.c \
 		$(LIB_MACHO_PATH)get_mach_header_32.c \
@@ -40,7 +44,6 @@ SRCS =	$(SRC_PATH)main.c \
 		$(LIB_MACHO_PATH)get_section_64.c \
 		$(LIB_MACHO_PATH)get_fat_header.c \
 		$(LIB_MACHO_PATH)get_fat_arch_32.c \
-		$(LIB_MACHO_PATH)get_fat_arch_64.c \
 
 OBJS = $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:36:29 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 17:59:59 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/07 18:01:03 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ struct section	*get_section_32(t_stat stat,
 	section = (struct section *)(ptr + offset);
 	if (magic == MH_MAGIC)
 		return (section);
+	section->addr = swap_bits_32(section->addr);
+	section->size = swap_bits_32(section->size);
 	section->offset = swap_bits_32(section->offset);
 	return (section);
 }
