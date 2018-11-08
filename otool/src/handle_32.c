@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/26 16:39:33 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/07 17:53:25 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/08 14:45:26 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int		handle_32(t_stat stat, void *ptr)
 		lc = get_load_command(stat, (void*)lc, h->magic, lc->cmdsize);
 		if (!lc)
 			return (ERR);
-		i++;		
+		i++;
 	}
 	return (OK);
 }

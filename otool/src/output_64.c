@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 15:43:01 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/07 21:14:50 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/08 13:49:40 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,6 @@ int				output_64(t_stat stat, struct mach_header_64 *h,
 		printf("%s:\n", stat.filename);
 	else if (strlen(stat.arch_name) > 0)
 		printf("%s %s:\n", stat.filename, stat.arch_name);
-	// else if (stat.object_name)
-	// 	printf("%s(%s):\n", stat.filename, stat.object_name);
 	printf("Contents of (%s,%s) section\n", sect->segname, sect->sectname);
 	text = (void*)h + sect->offset;
 	return (output(stat, sect, text));

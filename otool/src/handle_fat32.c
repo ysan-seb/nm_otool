@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 16:04:45 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/07 21:12:23 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/08 14:46:18 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int					handle_fat_32(t_stat s, void *ptr)
 	{
 		if (checkoff(s, ptr, arch->offset))
 			return (ERR);
-		// if (header->nfat_arch == 1)
-		// 	printf("%s:\n", s.filename);
 		if (arch->cputype == CPU_TYPE_X86_64 || header->nfat_arch == 1)
 			return (otool(s, s.ptr + arch->offset));
 		arch = get_fat_arch_32(s, arch, header->magic, sizeof(struct fat_arch));
