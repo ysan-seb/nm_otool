@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sort_ascii_64.c                                    :+:      :+:    :+:   */
+/*   reverse_digit_sort_32.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/07 13:23:25 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/09 17:40:24 by ysan-seb         ###   ########.fr       */
+/*   Created: 2018/11/09 16:31:55 by ysan-seb          #+#    #+#             */
+/*   Updated: 2018/11/09 17:43:29 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nm.h"
 
-static void				swap_arr(struct nlist_64 *a, struct nlist_64 *b)
+static void			swap_arr(struct nlist *a, struct nlist *b)
 {
-	struct nlist_64 c;
+	struct nlist c;
 
 	c = *a;
 	*a = *b;
 	*b = c;
 }
 
-static int				is_sorted(void *ptr, struct nlist_64 *array,
-	struct symtab_command *s)
+static int			is_sorted(void *ptr,
+		struct nlist *array, struct symtab_command *s)
 {
 	uint32_t	i;
 	char		*stringtable;
@@ -35,23 +35,23 @@ static int				is_sorted(void *ptr, struct nlist_64 *array,
 	{
 		s1 = stringtable + array[i].n_un.n_strx;
 		s2 = stringtable + array[i + 1].n_un.n_strx;
-		if (strcmp(s1, s2) > 0)
+		if (array[i].n_value < array[i + 1].n_value)
 			return (0);
-		else if (strcmp(s1, s2) == 0)
-			if (array[i].n_value > array[i + 1].n_value)
+		else if (array[i].n_value == array[i + 1].n_value)
+			if (strcmp(s1, s2) < 0)
 				return (0);
 		i++;
 	}
 	return (1);
 }
 
-static struct nlist_64	*sort_ascii_64(void *ptr,
-	struct nlist_64 *array, struct symtab_command *s)
+static struct nlist	*reverse_sort_digit_32(void *ptr,
+		struct nlist *array, struct symtab_command *s)
 {
-	uint32_t		i;
-	char			*s1;
-	char			*s2;
-	char			*stringtable;
+	uint32_t	i;
+	char		*s1;
+	char		*s2;
+	char		*stringtable;
 
 	i = 0;
 	stringtable = (void *)ptr + s->stroff;
@@ -59,22 +59,22 @@ static struct nlist_64	*sort_ascii_64(void *ptr,
 	{
 		s1 = stringtable + array[i].n_un.n_strx;
 		s2 = stringtable + array[i + 1].n_un.n_strx;
-		if (strcmp(s1, s2) > 0)
+		if (array[i].n_value < array[i + 1].n_value)
 			swap_arr(&array[i], &array[i + 1]);
-		else if (strcmp(s1, s2) == 0)
-			if (array[i].n_value > array[i + 1].n_value)
+		else if (array[i].n_value == array[i + 1].n_value)
+			if (strcmp(s1, s2) < 0)
 				swap_arr(&array[i], &array[i + 1]);
 		i++;
 	}
 	return (array);
 }
 
-struct nlist_64			*ascii_sort_64(void *ptr,
-		struct nlist_64 *array, struct symtab_command *s)
+struct nlist		*reverse_digit_sort_32(void *ptr,
+		struct nlist *array, struct symtab_command *s)
 {
 	while (1)
 	{
-		if (!(array = sort_ascii_64(ptr, array, s)))
+		if (!(array = reverse_sort_digit_32(ptr, array, s)))
 			return (NULL);
 		if (is_sorted(ptr, array, s))
 			break ;

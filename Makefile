@@ -6,7 +6,7 @@
 #    By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/17 07:19:36 by ysan-seb          #+#    #+#              #
-#    Updated: 2018/11/08 16:00:03 by ysan-seb         ###   ########.fr        #
+#    Updated: 2018/11/09 17:14:04 by ysan-seb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,6 +21,7 @@ OTOOL_SRC_PATH = ./otool/src/
 LIB_MACHO_PATH = ./lib_macho/
 
 NM_SRCS =		$(NM_SRC_PATH)main.c \
+				$(NM_SRC_PATH)parse_opt.c \
 				$(NM_SRC_PATH)nm.c \
 				$(NM_SRC_PATH)handle_fat32.c \
 				$(NM_SRC_PATH)handle_32.c \
@@ -28,10 +29,18 @@ NM_SRCS =		$(NM_SRC_PATH)main.c \
 				$(NM_SRC_PATH)handle_archive.c \
 				$(NM_SRC_PATH)parse_section_32.c \
 				$(NM_SRC_PATH)parse_section_64.c \
+				$(NM_SRC_PATH)sort_32.c \
 				$(NM_SRC_PATH)sort_ascii_32.c \
-				$(NM_SRC_PATH)output32.c \
+				$(NM_SRC_PATH)reverse_sort_ascii_32.c \
+				$(NM_SRC_PATH)digit_sort_32.c \
+				$(NM_SRC_PATH)reverse_digit_sort_32.c \
+				$(NM_SRC_PATH)sort_64.c \
 				$(NM_SRC_PATH)sort_ascii_64.c \
-				$(NM_SRC_PATH)output64.c \
+				$(NM_SRC_PATH)reverse_sort_ascii_64.c \
+				$(NM_SRC_PATH)digit_sort_64.c \
+				$(NM_SRC_PATH)reverse_digit_sort_64.c \
+				$(NM_SRC_PATH)output_32.c \
+				$(NM_SRC_PATH)output_64.c \
 				$(NM_SRC_PATH)checkptr.c \
 				$(LIB_MACHO_PATH)checkoff.c \
 				$(LIB_MACHO_PATH)swap_bits_16.c \
@@ -84,7 +93,7 @@ OTOOL_OBJS = $(OTOOL_SRCS:.c=.o)
 
 CC = gcc
 
-FLAGS = -Wall -Werror -Wextra
+FLAGS = -Wall -Werror -Wextra -g
 
 HEADER = -I./inc
 

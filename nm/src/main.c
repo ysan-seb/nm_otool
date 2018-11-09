@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:21:46 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/08 17:49:41 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/09 17:54:26 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,16 @@ static int	leave_the_program(char *file, char *error)
 	return (ERR);
 }
 
-static int	arg_init(int ac, char *file)
+static int	arg_init(t_stat stat, int nb_file, char *file)
 {
 	int		fd;
-	t_stat	stat;
 
 	stat.filename = file;
 	stat.tss = 0;
 	stat.dss = 0;
 	stat.bss = 0;
 	stat.m_arg = 0;
-	if (ac > 2)
+	if (nb_file > 1)
 		stat.m_arg = 1;
 	if ((fd = open(file, O_RDONLY)) < 0)
 		return (leave_the_program(file, ERR_OPEN));
@@ -46,80 +45,47 @@ static int	arg_init(int ac, char *file)
 	return (OK);
 }
 
-int			check_double(char opt[5], char c)
+int			nb_file(char **av)
 {
 	int i;
+	int nb_file;
 
 	i = 0;
-	while (opt[i])
-	{
-		if (opt[i] == c)
-		{
-			printf("ft_nm : option -%c : may only "
-			"occur zero or one times!\n", c);
-			return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int			parse_opt(char **av)
-{
-	int		i;
-	int		j;
-	int		k;
-	char	opt[5];
-
-	i = 0;
-	k = 0;
-	opt[4] = 0;
+	nb_file = 0;
 	while (av[i])
 	{
-		if (av[i][0] == '-' && av[i][1])
-		{
-			j = 1;
-			while (av[i][j])
-			{
-				if ((av[i][j] == 'j' || av[i][j] == 'n' || av[i][j] == 'p' ||
-				av[i][j] == 'r') && !check_double(opt, av[i][j]))
-					opt[k++] = av[i][j];
-				else
-				{
-					printf("ft_nm : invalid option -%c\n",  av[i][j]);
-					return (ERR);
-				}
-				j++;
-			}
-		}
-		else if (av[i][0] == '-' && !av[i][1])
-			return(leave_the_program(NULL, "ft_nm : Tinvalid option -"));
+		if (av[i][0])
+			nb_file++;
 		i++;
 	}
-	return (OK);
+	return (nb_file);
 }
 
 int			main(int ac, char **av)
 {
-	int i;
+	int		i;
+	t_stat	stat;
 
+	stat.opt[0] = 0;
 	if (ac < 2)
 		return (leave_the_program(NULL, "Usage: ft_nm <input file> ...\n\t-j\t"
 		"Just display the symbol names (no value or type).\n\t-n\t"
-		"Sort numerically rather than alphabetically.\n\t-p\tDon't" 
+		"Sort numerically rather than alphabetically.\n\t-p\tDon't"
 		"sort; display in symbol-table order.\n\t-r\tSort in reverse order."));
-	i = 1;
-	if (parse_opt(av + 1) == ERR)
+	i = -1;
+	if ((av = parse_opt(&stat, av)) == NULL)
 		return (leave_the_program(NULL, "Usage: ft_nm <input file> ...\n\t-j"
 		"\tJust display the symbol names "
 		"(no value or type).\n\t-n\tSort numerically rather than alphabetically"
 		".\n\t-p\tDon't sort; display in symbol-table order.\n\t"
 		"-r\tSort in reverse order."));
-	while (i < ac)
+	ac = nb_file(av);
+	if (ac == 0)
+		return (arg_init(stat, 1, "a.out"));
+	while (av[i++])
 	{
-		if (av[i][0] == '!')
-			arg_init(ac, av[i]);
-		i++;
+		if (av[i][0] != '\0')
+			arg_init(stat, ac, av[i]);
 	}
 	return (OK);
 }

@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 13:47:31 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/08 15:00:03 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/09 14:34:06 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@
 typedef struct				s_stat
 {
 	char					*filename;
+	char					opt[5];
 	char					*object_name;
 	char					arch_name[256];
 	void					*ptr;
