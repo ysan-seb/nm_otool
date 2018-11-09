@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:21:46 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/09 17:54:26 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/09 18:00:00 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int			main(int ac, char **av)
 	ac = nb_file(av);
 	if (ac == 0)
 		return (arg_init(stat, 1, "a.out"));
-	while (av[i++])
+	while (av[++i])
 	{
 		if (av[i][0] != '\0')
 			arg_init(stat, ac, av[i]);
