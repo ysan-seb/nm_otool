@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 15:43:01 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/08 16:45:04 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 18:55:42 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,24 +40,41 @@ static int		output(t_stat stat, struct section_64 *sect, char *text)
 	return (OK);
 }
 
-int				output_64(t_stat stat, struct mach_header_64 *h,
+static void		print_header(struct mach_header_64 *h)
+{
+	printf("Mach Header\n");
+	printf("      magic cputype cpusubtype  filetype ncmds sizeofcmds"
+	"      flags\n");
+	printf(" 0x%x %7u %10u  %8u %5u %10u 0x%08x\n", h->magic, h->cputype,
+	(uint32_t)h->cpusubtype == 2147483651 ? 3 : h->cpusubtype,
+	h->filetype, h->ncmds, h->sizeofcmds, h->flags);
+}
+
+int				output_64(t_stat st, struct mach_header_64 *h,
 		struct segment_command_64 *seg)
 {
-	struct section_64	*sect;
+	int					ret;
+	struct section_64	*s;
 	char				*text;
 
-	sect = get_section_64(stat, (void*)(seg + 1), h->magic, 0);
-	if (!sect)
+	ret = 0;
+	s = get_section_64(st, (void*)(seg + 1), h->magic, 0);
+	if (!s)
 		return (ERR);
-	if (strcmp(sect->sectname, SECT_TEXT) != 0)
+	if (strcmp(s->sectname, SECT_TEXT) != 0)
 		return (OK);
-	if (checkoff(stat, h, sect->offset + sect->size) == ERR)
+	if (checkoff(st, h, s->offset + s->size) == ERR)
 		return (ERR);
-	if (strlen(stat.arch_name) == 0 && !stat.object_name)
-		printf("%s:\n", stat.filename);
-	else if (strlen(stat.arch_name) > 0)
-		printf("%s %s:\n", stat.filename, stat.arch_name);
-	printf("Contents of (%s,%s) section\n", sect->segname, sect->sectname);
-	text = (void*)h + sect->offset;
-	return (output(stat, sect, text));
+	if (strchr(st.opt, 't') && strlen(st.arch_name) == 0 && !st.object_name)
+		printf("%s:\n", st.filename);
+	else if (strchr(st.opt, 't') && strlen(st.arch_name) > 0)
+		printf("%s %s:\n", st.filename, st.arch_name);
+	strchr(st.opt, 't') ? printf("Contents of (%s,%s) section\n",
+	s->segname, s->sectname) : 0;
+	text = (void*)h + s->offset;
+	if (strchr(st.opt, 't'))
+		ret = output(st, s, text);
+	if (strchr(st.opt, 'h'))
+		print_header(h);
+	return (ret);
 }

@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:21:46 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/09 18:00:00 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 17:37:41 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	arg_init(t_stat stat, int nb_file, char *file)
 	return (OK);
 }
 
-int			nb_file(char **av)
+static int	nb_file(char **av)
 {
 	int i;
 	int nb_file;
@@ -67,15 +67,10 @@ int			main(int ac, char **av)
 	t_stat	stat;
 
 	stat.opt[0] = 0;
-	if (ac < 2)
-		return (leave_the_program(NULL, "Usage: ft_nm <input file> ...\n\t-j\t"
-		"Just display the symbol names (no value or type).\n\t-n\t"
-		"Sort numerically rather than alphabetically.\n\t-p\tDon't"
-		"sort; display in symbol-table order.\n\t-r\tSort in reverse order."));
 	i = -1;
 	if ((av = parse_opt(&stat, av)) == NULL)
-		return (leave_the_program(NULL, "Usage: ft_nm <input file> ...\n\t-j"
-		"\tJust display the symbol names "
+		return (leave_the_program(NULL, "Usage: [options] ft_nm "
+		"<input file> ...\n\t-j\tJust display the symbol names "
 		"(no value or type).\n\t-n\tSort numerically rather than alphabetically"
 		".\n\t-p\tDon't sort; display in symbol-table order.\n\t"
 		"-r\tSort in reverse order."));

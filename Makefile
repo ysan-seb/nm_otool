@@ -6,7 +6,7 @@
 #    By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/17 07:19:36 by ysan-seb          #+#    #+#              #
-#    Updated: 2018/11/09 17:14:04 by ysan-seb         ###   ########.fr        #
+#    Updated: 2018/11/10 16:37:25 by ysan-seb         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ NM_SRCS =		$(NM_SRC_PATH)main.c \
 				$(LIB_MACHO_PATH)get_fat_arch_32.c \
 
 OTOOL_SRCS =	$(OTOOL_SRC_PATH)main.c \
+				$(OTOOL_SRC_PATH)parse_opt.c \
 				$(OTOOL_SRC_PATH)otool.c \
 				$(OTOOL_SRC_PATH)handle_fat32.c \
 				$(OTOOL_SRC_PATH)handle_32.c \

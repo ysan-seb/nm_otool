@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:35:25 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/06 18:00:57 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 18:24:24 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ struct mach_header_64	*get_mach_header_64(t_stat stat,
 	header->filetype = swap_bits_32(header->filetype);
 	header->ncmds = swap_bits_32(header->ncmds);
 	header->sizeofcmds = swap_bits_32(header->sizeofcmds);
+	header->flags = swap_bits_32(header->flags);
 	return (header);
 }

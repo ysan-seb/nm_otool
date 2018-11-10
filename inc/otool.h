@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/16 14:25:15 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/08 15:51:15 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 16:38:55 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "lib_macho.h"
 
 int							otool(t_stat stat, void *ptr);
+char						**parse_opt(t_stat *s, char **a);
 int							handle_fat_32(t_stat stat, void *ptr);
 int							handle_32(t_stat stat, void *ptr);
 int							handle_64(t_stat stat, void *ptr);

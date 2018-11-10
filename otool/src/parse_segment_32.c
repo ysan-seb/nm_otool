@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/29 12:47:34 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/07 17:56:44 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 13:38:51 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ int		parse_segment_32(
 		if (seg == NULL)
 			return (ERR);
 		if (strcmp(seg->segname, "__TEXT") == 0 ||
-			h->filetype == MH_OBJECT)
-			output_32(stat, h, seg);
+				h->filetype == MH_OBJECT)
+			if (output_32(stat, h, seg) == ERR)
+				return (ERR);
 	}
 	return (OK);
 }

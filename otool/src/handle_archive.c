@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/30 13:34:49 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/08 14:45:45 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 18:14:30 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static int		object_parse(t_stat s, void *ptr, size_t off)
 		h_ptr = ptr + off + atoi(o->ar_name + 3);
 		s.object_name = o->ar_fmag + 2;
 		off += atoi(o->ar_size);
-		printf("%s(%s):\n", s.filename, s.object_name);
+		strchr(s.opt, 't') ? printf("%s(%s):\n", s.filename, s.object_name) : 0;
 		if (otool(s, h_ptr) == ERR)
 			return (ERR);
 	}

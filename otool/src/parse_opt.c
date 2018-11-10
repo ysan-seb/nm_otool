@@ -6,7 +6,7 @@
 /*   By: ysan-seb <ysan-seb@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/09 12:59:28 by ysan-seb          #+#    #+#             */
-/*   Updated: 2018/11/10 16:49:36 by ysan-seb         ###   ########.fr       */
+/*   Updated: 2018/11/10 17:51:35 by ysan-seb         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int		dup(t_stat *stat, char c)
 	{
 		if (stat->opt[i] == c)
 		{
-			printf("ft_nm : option -%c : may only "
+			printf("ft_otool : option -%c : may only "
 			"occur zero or one times!\n", c);
 			return (1);
 		}
@@ -32,14 +32,14 @@ static int		dup(t_stat *stat, char c)
 
 int				auth(char c)
 {
-	if (c == 'j' || c == 'n' || c == 'p' || c == 'r')
+	if (c == 't' || c == 'f' || c == 'h')
 		return (1);
 	return (0);
 }
 
 char			**err_null(char c)
 {
-	printf("ft_nm : invalid option -%c\n", c);
+	printf("ft_otool : invalid option -%c\n", c);
 	return (NULL);
 }
 
